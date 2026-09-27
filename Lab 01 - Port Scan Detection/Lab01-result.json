@@ -1,0 +1,341 @@
+{
+    "_index": ".ds-logs-system.security-default-2026.09.27-000001",
+    "_id": "AaDkaqbrXJeOe4KYw7_T",
+    "_version": 1,
+    "_source": {
+      "agent": {
+        "name": "DESKTOP-FTGP1ES",
+        "id": "93788214-d29e-44e3-8f16-10743e885f1a",
+        "ephemeral_id": "83a6afee-d006-4e15-8eb7-a8dbce9b74a8",
+        "type": "filebeat",
+        "version": "9.5.4"
+      },
+      "winlog": {
+        "computer_name": "DESKTOP-FTGP1ES",
+        "record_id": "16889",
+        "process": {
+          "pid": 4,
+          "thread": {
+            "id": 11708
+          }
+        },
+        "task": "Filtering Platform Packet Drop",
+        "event_id": "5152",
+        "keywords": [
+          "Audit Failure"
+        ],
+        "provider_guid": "{54849625-5478-4994-A5BA-3E3B0328C30D}",
+        "channel": "Security",
+        "event_data": {
+          "LayerName": "Transport",
+          "LayerRTID": "13",
+          "FilterRTID": "67991",
+          "ProcessId": "0",
+          "FilterOrigin": "Stealth",
+          "Protocol": "6",
+          "Direction": "Inbound"
+        },
+        "provider_name": "Microsoft-Windows-Security-Auditing",
+        "opcode": "Info",
+        "version": 1
+      },
+      "log": {
+        "level": "information"
+      },
+      "elastic_agent": {
+        "id": "93788214-d29e-44e3-8f16-10743e885f1a",
+        "version": "9.5.4+build202609161310",
+        "snapshot": false
+      },
+      "destination": {
+        "port": 63146,
+        "ip": "10.10.10.186"
+      },
+      "source": {
+        "port": 9200,
+        "ip": "10.10.10.176"
+      },
+      "message": "The Windows Filtering Platform has blocked a packet.\n\nApplication Information:\n\tProcess ID:\t\t0\n\tApplication Name:\t-\n\nNetwork Information:\n\tDirection:\t\tInbound\n\tSource Address:\t\t10.10.10.176\n\tSource Port:\t\t9200\n\tDestination Address:\t10.10.10.186\n\tDestination Port:\t\t63146\n\tProtocol:\t\t6\n\nFilter Information:\n\tFilter Origin:\t\tStealth\n\tFilter Run-Time ID:\t67991\n\tLayer Name:\t\tTransport\n\tLayer Run-Time ID:\t13",
+      "network": {
+        "community_id": "1:GmscHZh4f+Tp52FNZxwhR0mBmj4=",
+        "transport": "tcp",
+        "iana_number": "6"
+      },
+      "input": {
+        "type": "winlog"
+      },
+      "@timestamp": "2026-09-27T19:49:39.404Z",
+      "ecs": {
+        "version": "8.11.0"
+      },
+      "related": {
+        "ip": [
+          "10.10.10.186",
+          "10.10.10.176"
+        ]
+      },
+      "data_stream": {
+        "namespace": "default",
+        "type": "logs",
+        "dataset": "system.security"
+      },
+      "host": {
+        "hostname": "DESKTOP-FTGP1ES",
+        "os": {
+          "build": "26200.6584",
+          "kernel": "10.0.26100.6584 (WinBuild.160101.0800)",
+          "name": "Windows 11 Enterprise Evaluation",
+          "type": "windows",
+          "family": "windows",
+          "version": "10.0",
+          "platform": "windows"
+        },
+        "ip": [
+          "fe80::767e:531e:bf64:c600",
+          "10.10.10.186"
+        ],
+        "name": "desktop-ftgp1es",
+        "id": "3db7e871-af6a-4c60-9af6-1a9f68e850c3",
+        "mac": [
+          "BC-24-11-A3-4A-0E"
+        ],
+        "architecture": "x86_64"
+      },
+      "event": {
+        "agent_id_status": "verified",
+        "ingested": "2026-09-27T19:49:46Z",
+        "code": "5152",
+        "provider": "Microsoft-Windows-Security-Auditing",
+        "created": "2026-09-27T19:49:41.018Z",
+        "kind": "event",
+        "module": "system",
+        "action": "windows-firewall-packet-drop",
+        "category": [
+          "network"
+        ],
+        "type": [
+          "connection",
+          "info",
+          "denied"
+        ],
+        "dataset": "system.security",
+        "outcome": "failure"
+      }
+    },
+    "fields": {
+      "winlog.event_data.FilterRTID": [
+        "67991"
+      ],
+      "winlog.event_data.LayerRTID": [
+        "13"
+      ],
+      "elastic_agent.version": [
+        "9.5.4+build202609161310"
+      ],
+      "event.category": [
+        "network"
+      ],
+      "host.os.name.text": [
+        "Windows 11 Enterprise Evaluation"
+      ],
+      "winlog.provider_guid": [
+        "{54849625-5478-4994-A5BA-3E3B0328C30D}"
+      ],
+      "winlog.provider_name": [
+        "Microsoft-Windows-Security-Auditing"
+      ],
+      "host.hostname": [
+        "DESKTOP-FTGP1ES"
+      ],
+      "winlog.event_data.Direction": [
+        "Inbound"
+      ],
+      "winlog.computer_name": [
+        "DESKTOP-FTGP1ES"
+      ],
+      "host.mac": [
+        "BC-24-11-A3-4A-0E"
+      ],
+      "winlog.process.pid": [
+        4
+      ],
+      "agent.name.text": [
+        "DESKTOP-FTGP1ES"
+      ],
+      "host.os.version": [
+        "10.0"
+      ],
+      "winlog.keywords": [
+        "Audit Failure"
+      ],
+      "winlog.record_id": [
+        "16889"
+      ],
+      "host.os.name": [
+        "Windows 11 Enterprise Evaluation"
+      ],
+      "log.level": [
+        "information"
+      ],
+      "source.ip": [
+        "10.10.10.176"
+      ],
+      "agent.name": [
+        "DESKTOP-FTGP1ES"
+      ],
+      "host.name": [
+        "desktop-ftgp1es"
+      ],
+      "network.community_id": [
+        "1:GmscHZh4f+Tp52FNZxwhR0mBmj4="
+      ],
+      "event.agent_id_status": [
+        "verified"
+      ],
+      "event.kind": [
+        "event"
+      ],
+      "winlog.event_data.Protocol": [
+        "6"
+      ],
+      "event.outcome": [
+        "failure"
+      ],
+      "winlog.version": [
+        1
+      ],
+      "host.os.type": [
+        "windows"
+      ],
+      "winlog.event_data.FilterOrigin": [
+        "Stealth"
+      ],
+      "input.type": [
+        "winlog"
+      ],
+      "data_stream.type": [
+        "logs"
+      ],
+      "host.architecture": [
+        "x86_64"
+      ],
+      "event.provider": [
+        "Microsoft-Windows-Security-Auditing"
+      ],
+      "event.code": [
+        "5152"
+      ],
+      "agent.id": [
+        "93788214-d29e-44e3-8f16-10743e885f1a"
+      ],
+      "source.port": [
+        9200
+      ],
+      "ecs.version": [
+        "8.11.0"
+      ],
+      "event.created": [
+        "2026-09-27T19:49:41.018Z"
+      ],
+      "network.iana_number": [
+        "6"
+      ],
+      "agent.version": [
+        "9.5.4"
+      ],
+      "host.os.family": [
+        "windows"
+      ],
+      "winlog.process.thread.id": [
+        11708
+      ],
+      "destination.port": [
+        63146
+      ],
+      "host.os.build": [
+        "26200.6584"
+      ],
+      "host.ip": [
+        "fe80::767e:531e:bf64:c600",
+        "10.10.10.186"
+      ],
+      "agent.type": [
+        "filebeat"
+      ],
+      "event.module": [
+        "system"
+      ],
+      "related.ip": [
+        "10.10.10.186",
+        "10.10.10.176"
+      ],
+      "host.os.kernel": [
+        "10.0.26100.6584 (WinBuild.160101.0800)"
+      ],
+      "elastic_agent.snapshot": [
+        false
+      ],
+      "host.id": [
+        "3db7e871-af6a-4c60-9af6-1a9f68e850c3"
+      ],
+      "winlog.event_data.ProcessId": [
+        "0"
+      ],
+      "winlog.task": [
+        "Filtering Platform Packet Drop"
+      ],
+      "elastic_agent.id": [
+        "93788214-d29e-44e3-8f16-10743e885f1a"
+      ],
+      "data_stream.namespace": [
+        "default"
+      ],
+      "message": [
+        "The Windows Filtering Platform has blocked a packet.\n\nApplication Information:\n\tProcess ID:\t\t0\n\tApplication Name:\t-\n\nNetwork Information:\n\tDirection:\t\tInbound\n\tSource Address:\t\t10.10.10.176\n\tSource Port:\t\t9200\n\tDestination Address:\t10.10.10.186\n\tDestination Port:\t\t63146\n\tProtocol:\t\t6\n\nFilter Information:\n\tFilter Origin:\t\tStealth\n\tFilter Run-Time ID:\t67991\n\tLayer Name:\t\tTransport\n\tLayer Run-Time ID:\t13"
+      ],
+      "winlog.event_id": [
+        "5152"
+      ],
+      "destination.ip": [
+        "10.10.10.186"
+      ],
+      "network.transport": [
+        "tcp"
+      ],
+      "event.action": [
+        "windows-firewall-packet-drop"
+      ],
+      "event.ingested": [
+        "2026-09-27T19:49:46.000Z"
+      ],
+      "@timestamp": [
+        "2026-09-27T19:49:39.404Z"
+      ],
+      "winlog.channel": [
+        "Security"
+      ],
+      "host.os.platform": [
+        "windows"
+      ],
+      "winlog.event_data.LayerName": [
+        "Transport"
+      ],
+      "data_stream.dataset": [
+        "system.security"
+      ],
+      "event.type": [
+        "connection",
+        "info",
+        "denied"
+      ],
+      "winlog.opcode": [
+        "Info"
+      ],
+      "agent.ephemeral_id": [
+        "83a6afee-d006-4e15-8eb7-a8dbce9b74a8"
+      ],
+      "event.dataset": [
+        "system.security"
+      ]
+    }
+  }
