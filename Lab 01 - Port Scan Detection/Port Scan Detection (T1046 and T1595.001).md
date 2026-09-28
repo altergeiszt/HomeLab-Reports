@@ -41,7 +41,7 @@ All Virtual Machines used in this lab are on an isolated network behind OPNSense
 | 15:57 | sudo nmap -Pn -sS --top-ports 100 10.10.10.186 | Port scan (true positive test) |
 | 20:04 | sudo nmap -Pn -sS --top-ports 100 10.10.10.186 | Port scan (true positive test) |
 | 20:30 | sudo nmap -Pn -sS --top-ports 100 10.10.10.186 | Post scan true positive |
-| 21:00 | sudo nmap -Pn -sS -p 22,80,443 | Below-threshold test |
+| 21:00 | sudo nmap -Pn -sS -p 22,80,443 10.10.10.186 | Below-threshold test |
 
 ## Telemetry
 
