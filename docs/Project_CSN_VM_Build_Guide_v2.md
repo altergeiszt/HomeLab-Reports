@@ -25,7 +25,15 @@ Setup instructions for the lab VMs beyond the core three. This covers the **Linu
 
 **Snapshots.** After each VM is built and enrolled, take a clean Proxmox snapshot (and let PBS back it up) so you can revert after a destructive test. Snapshot name convention: `<vm>-clean-<date>`.
 
-**Fleet policy.** In Elastic, create a **separate Agent policy per host type** (`linux-victim`, `domain-controller`) before enrolling, so each host ships the right integrations. You'll paste an enrollment token from Fleet into each install command below.
+**Fleet policy.** In Elastic, create a **separate Agent policy per host type** (`linux-victim`, `domain-controller`) before enrolling, so each host ships the right integrations. Grab each host's enrollment token from **Fleet → Agents → Add agent** with the matching policy selected, and paste it into the install command for that host.
+
+### A note on Fleet TLS and `--insecure`
+
+Every enroll command below uses `--insecure`, on purpose. We checked this lab's setup (Sept 2026): Fleet Server runs as an Elastic-Agent component on the `elastic-siem` host (`10.10.10.176:8220`) and presents a **self-signed cert** (`issuer O=elastic-fleet, CN=localhost`, `subject CN=elastic-siem`). There is **no CA file written to disk** to reuse — the TLS material is held internally by the managed agent, not exported as a `.crt`. So there's nothing to pass to `--certificate-authorities`, and the Win11 victim was enrolled the same way.
+
+`--insecure` means the agent does **not verify** Fleet Server's certificate. It does **not** turn off encryption — the agent↔Fleet channel is still TLS. On an isolated lab VLAN with no route to anything else, that's a fair trade.
+
+> **If you ever want to do it properly** (a good hygiene exercise): re-run Fleet Server setup with a real CA and the host's IP/DNS in the cert's SAN, distribute that CA to every agent, and drop `--insecure`. Not required to get the lab running.
 
 ---
 
@@ -74,12 +82,15 @@ sudo auditctl -l   # confirm rules loaded
 In Fleet, create/select the `linux-victim` policy, add the **Auditd Logs** (or **Auditd Manager**) and **System** integrations, then copy the Linux enroll command and run it on the victim:
 
 ```bash
-# From Fleet → Add agent → Linux tar (paste your URL/token/CA)
+# From Fleet → Add agent → Linux tar. Get the enrollment token from
+# Fleet → Agents → Add agent (pick the linux-victim policy).
 sudo ./elastic-agent install \
-  --url=https://<elastic-host>:8220 \
-  --enrollment-token=<token> \
-  --certificate-authorities=/path/to/ca.crt
+  --url=https://10.10.10.176:8220 \
+  --enrollment-token=<linux-victim-token> \
+  --insecure
 ```
+
+> `--insecure` skips verification of Fleet Server's TLS cert — it does **not** disable encryption; the agent↔Fleet channel is still TLS. We use it because Fleet presents a self-signed cert and there's no reusable CA file on disk (see [Fleet TLS note](#a-note-on-fleet-tls-and---insecure)). Fine for an isolated lab VLAN.
 
 ### 1.4 Verify and snapshot
 
@@ -94,7 +105,22 @@ sudo ./elastic-agent install \
 pwsh -c "IEX (IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1'); Install-AtomicRedTeam -getAtomics"
 ```
 
-Verify with a benign test (e.g. `Invoke-AtomicTest T1059.004 -ShowDetails`).
+To auto-load the module in every `pwsh` session, add it to your PowerShell profile. On Linux the profile's directory (`~/.config/powershell/`) usually doesn't exist yet, so editing `$PROFILE` directly fails with a "directory does not exist" error. Create the folder and write the file from inside `pwsh` instead:
+
+```powershell
+New-Item -ItemType Directory -Path (Split-Path $PROFILE) -Force
+@'
+Import-Module "$HOME/AtomicRedTeam/invoke-atomicredteam/Invoke-AtomicRedTeam.psd1" -Force
+$PSDefaultParameterValues = @{"Invoke-AtomicTest:PathToAtomicsFolder" = "$HOME/AtomicRedTeam/atomics"}
+'@ | Add-Content -Path $PROFILE
+. $PROFILE
+```
+
+> Run `pwsh` as your normal user, not `sudo` — otherwise `$PROFILE` points into `/root`. Individual Atomics that need root are run with `sudo` per-test.
+
+Verify with a benign test (e.g. `Invoke-AtomicTest T1059.004 -ShowDetails`), and confirm the module auto-loads with `Get-Command Invoke-AtomicTest` in a fresh session.
+
+> Note: editing a shell profile to auto-run a module is itself a persistence technique (T1546.013) — one you'll later detect in the Tier 2a exercises.
 
 ---
 
@@ -135,7 +161,16 @@ Then **join the Windows 11 victim** to `csn.lab` (System → Rename this PC (adv
 ### 2.4 Telemetry: Sysmon + Elastic Agent + audit policy
 
 1. Install **Sysmon** with a good config (SwiftOnSecurity or Olaf Hartong's modular config) — same as your Win11 victim.
-2. In Fleet, create the `domain-controller` policy with the **Windows**, **System**, and **Sysmon** integrations; enroll the agent (Fleet → Add agent → Windows).
+2. In Fleet, create the `domain-controller` policy with the **Windows**, **System**, and **Sysmon** integrations, then enroll the agent from an elevated PowerShell (Fleet → Add agent → Windows for the download step; token from Fleet → Agents → Add agent, `domain-controller` policy):
+
+   ```powershell
+   .\elastic-agent.exe install `
+     --url=https://10.10.10.176:8220 `
+     --enrollment-token=<dc-token> `
+     --insecure
+   ```
+
+   Same `--insecure` reasoning as the Linux victim — see the [Fleet TLS note](#a-note-on-fleet-tls-and---insecure).
 3. Turn on the audit subcategories the AD techniques need:
 
 ```powershell
@@ -196,7 +231,7 @@ sudo /opt/zeek/bin/zeekctl deploy
 
 ### 3.3 Ship logs to Elastic
 
-In Fleet, add the **Zeek** and **Suricata** integrations to a policy (a `network-sensor` policy, or reuse one), enroll the Elastic Agent on the sensor, and point the integrations at the log paths (`/opt/zeek/logs/current/` and `/var/log/suricata/eve.json`).
+In Fleet, add the **Zeek** and **Suricata** integrations to a policy (a `network-sensor` policy, or reuse one), enroll the Elastic Agent on the sensor with the same `--insecure` install command as the Linux victim ([Fleet TLS note](#a-note-on-fleet-tls-and---insecure)), and point the integrations at the log paths (`/opt/zeek/logs/current/` and `/var/log/suricata/eve.json`).
 
 ### 3.4 Verify and snapshot
 
@@ -250,7 +285,7 @@ Run a small built-in operation (e.g. *Discovery*) against the agent, then pivot 
 
 ## Build order checklist
 
-- [ ] Lab VLAN confirmed isolated (no route to home LAN)
+- [x] Lab VLAN confirmed isolated (no route to home LAN)
 - [ ] Fleet policies created: `linux-victim`, `domain-controller`, `network-sensor`
 - [ ] **Linux victim** built, auditd + Agent healthy, ART installed, snapshot taken
 - [ ] **Domain controller** promoted (`csn.lab`), seeded, Win11 joined, audit policy on, snapshots taken (DC + re-snapshot Win11)
@@ -258,6 +293,3 @@ Run a small built-in operation (e.g. *Discovery*) against the agent, then pivot 
 - [ ] **C2 server** running Caldera, agent checks in from Win11, snapshot taken
 
 Once these are green, the Tier 2 and Tier 3 exercises in the roadmap all have the infrastructure they need.
-
-
-C11366D1178003B86C8F43776F90D89420EB800E8589A129E1D206488BC45EE1
