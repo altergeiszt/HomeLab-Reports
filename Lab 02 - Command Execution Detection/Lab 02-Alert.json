@@ -1,0 +1,1248 @@
+{
+    "_index": ".internal.alerts-security.alerts-default-000001",
+    "_id": "ba81f1dfa5ae27631b8943c500ba3422281f8fc57d00bc68af4667cc364deedb",
+    "_version": 1,
+    "_score": 0,
+    "_source": {
+      "kibana.alert.rule.execution.timestamp": "2026-10-03T02:42:09.788Z",
+      "kibana.alert.start": "2026-10-03T02:42:09.788Z",
+      "kibana.alert.last_detected": "2026-10-03T02:42:09.788Z",
+      "kibana.version": "9.5.4",
+      "kibana.alert.rule.parameters": {
+        "description": "PowerShell child process spawned from  an SSH or WinRM remoting session.",
+        "risk_score": 47,
+        "severity": "medium",
+        "license": "",
+        "meta": {
+          "kibana_siem_app_url": "http://10.10.10.150:5601/app/security"
+        },
+        "author": [],
+        "false_positives": [
+          "Legitimate admin use of PowerShell remoting (SSH or WinRM)"
+        ],
+        "from": "now-6m",
+        "rule_id": "3425233f-bf84-4db8-95c2-e43576c78dca",
+        "max_signals": 100,
+        "risk_score_mapping": [],
+        "severity_mapping": [],
+        "threat": [
+          {
+            "framework": "MITRE ATT&CK",
+            "tactic": {
+              "id": "TA0002",
+              "name": "Execution",
+              "reference": "https://attack.mitre.org/tactics/TA0002/"
+            },
+            "technique": [
+              {
+                "id": "T1059",
+                "name": "Command and Scripting Interpreter",
+                "reference": "https://attack.mitre.org/techniques/T1059/",
+                "subtechnique": [
+                  {
+                    "id": "T1059.001",
+                    "name": "PowerShell",
+                    "reference": "https://attack.mitre.org/techniques/T1059/001/"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "framework": "MITRE ATT&CK",
+            "tactic": {
+              "id": "TA0008",
+              "name": "Lateral Movement",
+              "reference": "https://attack.mitre.org/tactics/TA0008/"
+            },
+            "technique": [
+              {
+                "id": "T1021",
+                "name": "Remote Services",
+                "reference": "https://attack.mitre.org/techniques/T1021/",
+                "subtechnique": [
+                  {
+                    "id": "T1021.004",
+                    "name": "SSH",
+                    "reference": "https://attack.mitre.org/techniques/T1021/004/"
+                  }
+                ]
+              },
+              {
+                "id": "T1021",
+                "name": "Remote Services",
+                "reference": "https://attack.mitre.org/techniques/T1021/",
+                "subtechnique": [
+                  {
+                    "id": "T1021.006",
+                    "name": "Windows Remote Management",
+                    "reference": "https://attack.mitre.org/techniques/T1021/006/"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "to": "now",
+        "references": [],
+        "version": 1,
+        "exceptions_list": [],
+        "immutable": false,
+        "rule_source": {
+          "type": "internal"
+        },
+        "related_integrations": [],
+        "required_fields": [],
+        "setup": "",
+        "type": "eql",
+        "language": "eql",
+        "index": [
+          "apm-*-transaction*",
+          "auditbeat-*",
+          "endgame-*",
+          "filebeat-*",
+          "logs-*",
+          "packetbeat-*",
+          "traces-apm*",
+          "winlogbeat-*",
+          "-*elastic-cloud-logs-*",
+          "logs-windows.sysmon_operational-*"
+        ],
+        "query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.name : (\"powershell.exe\", \"pwsh.exe\") and\n  (\n    process.parent.name : \"wsmprovhost.exe\" or\n    (process.parent.name : \"pwsh.exe\" and process.parent.args : \"-sshs\")\n  )",
+        "filters": []
+      },
+      "kibana.alert.rule.category": "Event Correlation Rule",
+      "kibana.alert.rule.consumer": "siem",
+      "kibana.alert.rule.execution.uuid": "e9c08799-0b0b-488c-86f7-2c2470c46a9d",
+      "kibana.alert.rule.name": "CSN - Powershell remote execution (SSH/WinRM)",
+      "kibana.alert.rule.producer": "siem",
+      "kibana.alert.rule.revision": 3,
+      "kibana.alert.rule.rule_type_id": "siem.eqlRule",
+      "kibana.alert.rule.uuid": "cebec9ef-aea3-4ed5-a722-d196575886df",
+      "kibana.space_ids": [
+        "default"
+      ],
+      "kibana.alert.rule.tags": [],
+      "@timestamp": "2026-10-03T02:42:09.776Z",
+      "agent": {
+        "name": "win11-victim",
+        "id": "322b7b05-98a5-4a85-aef0-5e46bb86b0e0",
+        "ephemeral_id": "fe6851e2-f269-472c-8af9-4762f0de37b0",
+        "type": "filebeat",
+        "version": "9.5.4"
+      },
+      "process": {
+        "args": [
+          "powershell.exe",
+          "&",
+          "{Out-ATHPowerShellCommandLineParameter",
+          "-CommandLineSwitchType",
+          "Hyphen",
+          "-CommandParamVariation",
+          "C",
+          "-Execute",
+          "-ErrorAction",
+          "Stop}"
+        ],
+        "parent": {
+          "args": [
+            "c:/progra~1/powershell/7/pwsh.exe",
+            "-sshs",
+            "-NoLogo"
+          ],
+          "name": "pwsh.exe",
+          "pid": 7580,
+          "args_count": 3,
+          "entity_id": "{3DB7E871-6A22-6AC0-0502-000000000B00}",
+          "executable": "C:\\PROGRA~1\\PowerShell\\7\\pwsh.exe",
+          "command_line": "c:/progra~1/powershell/7/pwsh.exe  -sshs -NoLogo"
+        },
+        "pe": {
+          "file_version": "10.0.26100.9278 (WinBuild.160101.0800)",
+          "product": "Microsoft® Windows® Operating System",
+          "imphash": "2f87ce4617f593d7148b739bbf06d059",
+          "description": "Windows PowerShell",
+          "original_file_name": "PowerShell.EXE",
+          "company": "Microsoft Corporation"
+        },
+        "name": "powershell.exe",
+        "pid": 6872,
+        "working_directory": "C:\\Users\\Alter\\AppData\\Local\\Temp\\",
+        "args_count": 10,
+        "entity_id": "{3DB7E871-6A91-6AC0-1402-000000000B00}",
+        "hash": {
+          "sha1": "a4f874f663d4b2e682bbae87fd121865a42dddbb",
+          "sha256": "8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e",
+          "md5": "61f649a6fdc374a6bf36c860519e017c"
+        },
+        "executable": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "command_line": "\"powershell.exe\" & {Out-ATHPowerShellCommandLineParameter -CommandLineSwitchType Hyphen -CommandParamVariation C -Execute -ErrorAction Stop}"
+      },
+      "winlog": {
+        "record_id": "636711",
+        "computer_name": "win11-victim",
+        "process": {
+          "pid": 3504,
+          "thread": {
+            "id": 4636
+          }
+        },
+        "task": "Process Create (rule: ProcessCreate)",
+        "event_id": "1",
+        "provider_guid": "{5770385F-C22A-43E0-BF4C-06F5698FFBD9}",
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "event_data": {
+          "Company": "Microsoft Corporation",
+          "Description": "Windows PowerShell",
+          "LogonGuid": "{3DB7E871-6A22-6AC0-967C-A70000000000}",
+          "TerminalSessionId": "0",
+          "IntegrityLevel": "High",
+          "ParentUser": "WIN11-VICTIM\\Alter",
+          "Product": "Microsoft® Windows® Operating System",
+          "FileVersion": "10.0.26100.9278 (WinBuild.160101.0800)",
+          "LogonId": "0xa77c96"
+        },
+        "opcode": "Info",
+        "provider_name": "Microsoft-Windows-Sysmon",
+        "version": 5,
+        "user": {
+          "identifier": "S-1-5-18",
+          "domain": "NT AUTHORITY",
+          "name": "SYSTEM",
+          "type": "User"
+        }
+      },
+      "log": {
+        "level": "information"
+      },
+      "elastic_agent": {
+        "id": "322b7b05-98a5-4a85-aef0-5e46bb86b0e0",
+        "version": "9.5.4+build202609161310",
+        "snapshot": false
+      },
+      "rule": {
+        "name": "technique_id=T1059.001,technique_name=PowerShell"
+      },
+      "message": "Process Create:\nRuleName: technique_id=T1059.001,technique_name=PowerShell\nUtcTime: 2026-10-03 02:38:09.335\nProcessGuid: {3DB7E871-6A91-6AC0-1402-000000000B00}\nProcessId: 6872\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\nFileVersion: 10.0.26100.9278 (WinBuild.160101.0800)\nDescription: Windows PowerShell\nProduct: Microsoft® Windows® Operating System\nCompany: Microsoft Corporation\nOriginalFileName: PowerShell.EXE\nCommandLine: \"powershell.exe\" & {Out-ATHPowerShellCommandLineParameter -CommandLineSwitchType Hyphen -CommandParamVariation C -Execute -ErrorAction Stop}\nCurrentDirectory: C:\\Users\\Alter\\AppData\\Local\\Temp\\\nUser: WIN11-VICTIM\\Alter\nLogonGuid: {3DB7E871-6A22-6AC0-967C-A70000000000}\nLogonId: 0xa77c96\nTerminalSessionId: 0\nIntegrityLevel: High\nHashes: SHA1=A4F874F663D4B2E682BBAE87FD121865A42DDDBB,MD5=61F649A6FDC374A6BF36C860519E017C,SHA256=8BB6FA8C283B4D92120B1EF249A9B311B0F804D4CABBE9981159976C8BE76A5E,IMPHASH=2F87CE4617F593D7148B739BBF06D059\nParentProcessGuid: {3DB7E871-6A22-6AC0-0502-000000000B00}\nParentProcessId: 7580\nParentImage: C:\\PROGRA~1\\PowerShell\\7\\pwsh.exe\nParentCommandLine: c:/progra~1/powershell/7/pwsh.exe  -sshs -NoLogo\nParentUser: WIN11-VICTIM\\Alter",
+      "input": {
+        "type": "winlog"
+      },
+      "ecs": {
+        "version": "8.17.0"
+      },
+      "related": {
+        "user": [
+          "Alter"
+        ],
+        "hash": [
+          "8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e",
+          "a4f874f663d4b2e682bbae87fd121865a42dddbb",
+          "61f649a6fdc374a6bf36c860519e017c",
+          "2f87ce4617f593d7148b739bbf06d059"
+        ]
+      },
+      "data_stream": {
+        "namespace": "default",
+        "type": "logs",
+        "dataset": "windows.sysmon_operational"
+      },
+      "host": {
+        "hostname": "win11-victim",
+        "os": {
+          "build": "26200.9457",
+          "kernel": "10.0.26100.9457 (WinBuild.160101.0800)",
+          "name": "Windows 11 Enterprise Evaluation",
+          "family": "windows",
+          "type": "windows",
+          "version": "10.0",
+          "platform": "windows"
+        },
+        "ip": [
+          "fe80::767e:531e:bf64:c600",
+          "10.10.10.186"
+        ],
+        "name": "win11-victim",
+        "id": "3db7e871-af6a-4c60-9af6-1a9f68e850c3",
+        "mac": [
+          "BC-24-11-A3-4A-0E"
+        ],
+        "architecture": "x86_64"
+      },
+      "event": {
+        "agent_id_status": "verified",
+        "ingested": "2026-10-03T02:38:13Z",
+        "code": "1",
+        "provider": "Microsoft-Windows-Sysmon",
+        "created": "2026-10-03T02:38:10.722Z",
+        "action": "Process creation",
+        "category": [
+          "process"
+        ],
+        "type": [
+          "start"
+        ],
+        "dataset": "windows.sysmon_operational",
+        "module": "windows"
+      },
+      "user": {
+        "domain": "WIN11-VICTIM",
+        "name": "Alter",
+        "id": "S-1-5-18"
+      },
+      "kibana.alert.original_data_stream.namespace": "default",
+      "kibana.alert.original_data_stream.type": "logs",
+      "kibana.alert.original_data_stream.dataset": "windows.sysmon_operational",
+      "kibana.alert.original_event.agent_id_status": "verified",
+      "kibana.alert.original_event.ingested": "2026-10-03T02:38:13Z",
+      "kibana.alert.original_event.code": "1",
+      "kibana.alert.original_event.provider": "Microsoft-Windows-Sysmon",
+      "kibana.alert.original_event.kind": "event",
+      "kibana.alert.original_event.created": "2026-10-03T02:38:10.722Z",
+      "kibana.alert.original_event.action": "Process creation",
+      "kibana.alert.original_event.category": [
+        "process"
+      ],
+      "kibana.alert.original_event.type": [
+        "start"
+      ],
+      "kibana.alert.original_event.dataset": "windows.sysmon_operational",
+      "kibana.alert.original_event.module": "windows",
+      "event.kind": "signal",
+      "kibana.alert.original_time": "2026-10-03T02:38:09.335Z",
+      "kibana.alert.ancestors": [
+        {
+          "id": "AaD_oHY2bcLdTR1XrqVk",
+          "type": "event",
+          "index": ".ds-logs-windows.sysmon_operational-default-2026.10.01-000001",
+          "depth": 0
+        }
+      ],
+      "kibana.alert.status": "active",
+      "kibana.alert.workflow_status": "open",
+      "kibana.alert.depth": 1,
+      "kibana.alert.reason": "process event with process powershell.exe, parent process pwsh.exe, by Alter on win11-victim created medium alert CSN - Powershell remote execution (SSH/WinRM).",
+      "kibana.alert.severity": "medium",
+      "kibana.alert.risk_score": 47,
+      "kibana.alert.rule.actions": [],
+      "kibana.alert.rule.author": [],
+      "kibana.alert.rule.created_at": "2026-10-02T19:51:36.465Z",
+      "kibana.alert.rule.created_by": "elastic",
+      "kibana.alert.rule.description": "PowerShell child process spawned from  an SSH or WinRM remoting session.",
+      "kibana.alert.rule.enabled": true,
+      "kibana.alert.rule.exceptions_list": [],
+      "kibana.alert.rule.false_positives": [
+        "Legitimate admin use of PowerShell remoting (SSH or WinRM)"
+      ],
+      "kibana.alert.rule.from": "now-6m",
+      "kibana.alert.rule.immutable": false,
+      "kibana.alert.rule.interval": "5m",
+      "kibana.alert.rule.indices": [
+        "apm-*-transaction*",
+        "auditbeat-*",
+        "endgame-*",
+        "filebeat-*",
+        "logs-*",
+        "packetbeat-*",
+        "traces-apm*",
+        "winlogbeat-*",
+        "-*elastic-cloud-logs-*",
+        "logs-windows.sysmon_operational-*"
+      ],
+      "kibana.alert.rule.license": "",
+      "kibana.alert.rule.max_signals": 100,
+      "kibana.alert.rule.references": [],
+      "kibana.alert.rule.risk_score_mapping": [],
+      "kibana.alert.rule.rule_id": "3425233f-bf84-4db8-95c2-e43576c78dca",
+      "kibana.alert.rule.severity_mapping": [],
+      "kibana.alert.rule.threat": [
+        {
+          "framework": "MITRE ATT&CK",
+          "tactic": {
+            "id": "TA0002",
+            "name": "Execution",
+            "reference": "https://attack.mitre.org/tactics/TA0002/"
+          },
+          "technique": [
+            {
+              "id": "T1059",
+              "name": "Command and Scripting Interpreter",
+              "reference": "https://attack.mitre.org/techniques/T1059/",
+              "subtechnique": [
+                {
+                  "id": "T1059.001",
+                  "name": "PowerShell",
+                  "reference": "https://attack.mitre.org/techniques/T1059/001/"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "framework": "MITRE ATT&CK",
+          "tactic": {
+            "id": "TA0008",
+            "name": "Lateral Movement",
+            "reference": "https://attack.mitre.org/tactics/TA0008/"
+          },
+          "technique": [
+            {
+              "id": "T1021",
+              "name": "Remote Services",
+              "reference": "https://attack.mitre.org/techniques/T1021/",
+              "subtechnique": [
+                {
+                  "id": "T1021.004",
+                  "name": "SSH",
+                  "reference": "https://attack.mitre.org/techniques/T1021/004/"
+                }
+              ]
+            },
+            {
+              "id": "T1021",
+              "name": "Remote Services",
+              "reference": "https://attack.mitre.org/techniques/T1021/",
+              "subtechnique": [
+                {
+                  "id": "T1021.006",
+                  "name": "Windows Remote Management",
+                  "reference": "https://attack.mitre.org/techniques/T1021/006/"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "kibana.alert.rule.to": "now",
+      "kibana.alert.rule.type": "eql",
+      "kibana.alert.rule.updated_at": "2026-10-02T20:16:09.761Z",
+      "kibana.alert.rule.updated_by": "elastic",
+      "kibana.alert.rule.version": 1,
+      "kibana.alert.uuid": "ba81f1dfa5ae27631b8943c500ba3422281f8fc57d00bc68af4667cc364deedb",
+      "kibana.alert.workflow_tags": [],
+      "kibana.alert.workflow_assignee_ids": [],
+      "kibana.alert.rule.meta.kibana_siem_app_url": "http://10.10.10.150:5601/app/security",
+      "kibana.alert.rule.risk_score": 47,
+      "kibana.alert.rule.severity": "medium",
+      "kibana.alert.intended_timestamp": "2026-10-03T02:42:09.776Z",
+      "kibana.alert.rule.execution.type": "scheduled"
+    },
+    "fields": {
+      "process.hash.md5": [
+        "61f649a6fdc374a6bf36c860519e017c"
+      ],
+      "kibana.alert.rule.updated_by": [
+        "elastic"
+      ],
+      "elastic_agent.version": [
+        "9.5.4+build202609161310"
+      ],
+      "host.os.name.text": [
+        "Windows 11 Enterprise Evaluation"
+      ],
+      "process.hash.sha256": [
+        "8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e"
+      ],
+      "host.hostname": [
+        "win11-victim"
+      ],
+      "signal.original_event.created": [
+        "2026-10-03T02:38:10.722Z"
+      ],
+      "host.mac": [
+        "BC-24-11-A3-4A-0E"
+      ],
+      "signal.rule.threat.technique.subtechnique.id": [
+        "T1059.001",
+        "T1021.004",
+        "T1021.006"
+      ],
+      "winlog.process.pid": [
+        3504
+      ],
+      "kibana.alert.rule.threat.technique.id": [
+        "T1059",
+        "T1021",
+        "T1021"
+      ],
+      "signal.rule.enabled": [
+        "true"
+      ],
+      "host.os.version": [
+        "10.0"
+      ],
+      "signal.rule.max_signals": [
+        100
+      ],
+      "kibana.alert.risk_score": [
+        47
+      ],
+      "signal.rule.updated_at": [
+        "2026-10-02T20:16:09.761Z"
+      ],
+      "kibana.alert.rule.threat.technique.subtechnique.reference": [
+        "https://attack.mitre.org/techniques/T1059/001/",
+        "https://attack.mitre.org/techniques/T1021/004/",
+        "https://attack.mitre.org/techniques/T1021/006/"
+      ],
+      "winlog.event_data.Company": [
+        "Microsoft Corporation"
+      ],
+      "host.os.type": [
+        "windows"
+      ],
+      "signal.original_event.code": [
+        "1"
+      ],
+      "kibana.alert.original_event.module": [
+        "windows"
+      ],
+      "kibana.alert.rule.interval": [
+        "5m"
+      ],
+      "kibana.alert.rule.type": [
+        "eql"
+      ],
+      "event.provider": [
+        "Microsoft-Windows-Sysmon"
+      ],
+      "kibana.alert.rule.immutable": [
+        "false"
+      ],
+      "kibana.alert.rule.version": [
+        "1"
+      ],
+      "process.command_line.text": [
+        "\"powershell.exe\" & {Out-ATHPowerShellCommandLineParameter -CommandLineSwitchType Hyphen -CommandParamVariation C -Execute -ErrorAction Stop}"
+      ],
+      "winlog.event_data.Description": [
+        "Windows PowerShell"
+      ],
+      "process.working_directory": [
+        "C:\\Users\\Alter\\AppData\\Local\\Temp\\"
+      ],
+      "process.entity_id": [
+        "{3DB7E871-6A91-6AC0-1402-000000000B00}"
+      ],
+      "host.ip": [
+        "fe80::767e:531e:bf64:c600",
+        "10.10.10.186"
+      ],
+      "agent.type": [
+        "filebeat"
+      ],
+      "process.pe.original_file_name": [
+        "PowerShell.EXE"
+      ],
+      "process.executable.text": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+      ],
+      "signal.original_event.category": [
+        "process"
+      ],
+      "signal.rule.threat.framework": [
+        "MITRE ATT&CK",
+        "MITRE ATT&CK"
+      ],
+      "host.id": [
+        "3db7e871-af6a-4c60-9af6-1a9f68e850c3"
+      ],
+      "elastic_agent.id": [
+        "322b7b05-98a5-4a85-aef0-5e46bb86b0e0"
+      ],
+      "process.working_directory.text": [
+        "C:\\Users\\Alter\\AppData\\Local\\Temp\\"
+      ],
+      "kibana.alert.rule.false_positives": [
+        "Legitimate admin use of PowerShell remoting (SSH or WinRM)"
+      ],
+      "kibana.alert.rule.indices": [
+        "apm-*-transaction*",
+        "auditbeat-*",
+        "endgame-*",
+        "filebeat-*",
+        "logs-*",
+        "packetbeat-*",
+        "traces-apm*",
+        "winlogbeat-*",
+        "-*elastic-cloud-logs-*",
+        "logs-windows.sysmon_operational-*"
+      ],
+      "signal.rule.threat.technique.subtechnique.reference": [
+        "https://attack.mitre.org/techniques/T1059/001/",
+        "https://attack.mitre.org/techniques/T1021/004/",
+        "https://attack.mitre.org/techniques/T1021/006/"
+      ],
+      "signal.rule.updated_by": [
+        "elastic"
+      ],
+      "winlog.channel": [
+        "Microsoft-Windows-Sysmon/Operational"
+      ],
+      "host.os.platform": [
+        "windows"
+      ],
+      "kibana.alert.intended_timestamp": [
+        "2026-10-03T02:42:09.776Z"
+      ],
+      "kibana.alert.rule.severity": [
+        "medium"
+      ],
+      "winlog.opcode": [
+        "Info"
+      ],
+      "kibana.alert.rule.execution.timestamp": [
+        "2026-10-03T02:42:09.788Z"
+      ],
+      "signal.rule.threat.technique.reference": [
+        "https://attack.mitre.org/techniques/T1059/",
+        "https://attack.mitre.org/techniques/T1021/",
+        "https://attack.mitre.org/techniques/T1021/"
+      ],
+      "kibana.version": [
+        "9.5.4"
+      ],
+      "winlog.event_data.TerminalSessionId": [
+        "0"
+      ],
+      "signal.ancestors.type": [
+        "event"
+      ],
+      "user.name.text": [
+        "Alter"
+      ],
+      "winlog.event_data.LogonId": [
+        "0xa77c96"
+      ],
+      "kibana.alert.ancestors.id": [
+        "AaD_oHY2bcLdTR1XrqVk"
+      ],
+      "process.name.text": [
+        "powershell.exe"
+      ],
+      "kibana.alert.original_data_stream.namespace": [
+        "default"
+      ],
+      "kibana.alert.original_event.code": [
+        "1"
+      ],
+      "kibana.alert.rule.description": [
+        "PowerShell child process spawned from  an SSH or WinRM remoting session."
+      ],
+      "related.hash": [
+        "8bb6fa8c283b4d92120b1ef249a9b311b0f804d4cabbe9981159976c8be76a5e",
+        "a4f874f663d4b2e682bbae87fd121865a42dddbb",
+        "61f649a6fdc374a6bf36c860519e017c",
+        "2f87ce4617f593d7148b739bbf06d059"
+      ],
+      "winlog.computer_name": [
+        "win11-victim"
+      ],
+      "kibana.alert.rule.producer": [
+        "siem"
+      ],
+      "kibana.alert.rule.to": [
+        "now"
+      ],
+      "kibana.alert.original_event.ingested": [
+        "2026-10-03T02:38:13.000Z"
+      ],
+      "signal.rule.id": [
+        "cebec9ef-aea3-4ed5-a722-d196575886df"
+      ],
+      "signal.reason": [
+        "process event with process powershell.exe, parent process pwsh.exe, by Alter on win11-victim created medium alert CSN - Powershell remote execution (SSH/WinRM)."
+      ],
+      "signal.rule.risk_score": [
+        47
+      ],
+      "host.os.name": [
+        "Windows 11 Enterprise Evaluation"
+      ],
+      "log.level": [
+        "information"
+      ],
+      "signal.status": [
+        "open"
+      ],
+      "rule.name": [
+        "technique_id=T1059.001,technique_name=PowerShell"
+      ],
+      "kibana.alert.rule.threat.tactic.name": [
+        "Execution",
+        "Lateral Movement"
+      ],
+      "kibana.alert.rule.uuid": [
+        "cebec9ef-aea3-4ed5-a722-d196575886df"
+      ],
+      "kibana.alert.original_event.category": [
+        "process"
+      ],
+      "signal.original_event.provider": [
+        "Microsoft-Windows-Sysmon"
+      ],
+      "process.name": [
+        "powershell.exe"
+      ],
+      "process.parent.executable.text": [
+        "C:\\PROGRA~1\\PowerShell\\7\\pwsh.exe"
+      ],
+      "kibana.alert.ancestors.index": [
+        ".ds-logs-windows.sysmon_operational-default-2026.10.01-000001"
+      ],
+      "process.pe.description": [
+        "Windows PowerShell"
+      ],
+      "agent.version": [
+        "9.5.4"
+      ],
+      "host.os.family": [
+        "windows"
+      ],
+      "kibana.alert.rule.from": [
+        "now-6m"
+      ],
+      "kibana.alert.rule.parameters": [
+        {
+          "severity": "medium",
+          "max_signals": 100,
+          "rule_source": {
+            "type": "internal"
+          },
+          "risk_score": 47,
+          "query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.name : (\"powershell.exe\", \"pwsh.exe\") and\n  (\n    process.parent.name : \"wsmprovhost.exe\" or\n    (process.parent.name : \"pwsh.exe\" and process.parent.args : \"-sshs\")\n  )",
+          "description": "PowerShell child process spawned from  an SSH or WinRM remoting session.",
+          "index": [
+            "apm-*-transaction*",
+            "auditbeat-*",
+            "endgame-*",
+            "filebeat-*",
+            "logs-*",
+            "packetbeat-*",
+            "traces-apm*",
+            "winlogbeat-*",
+            "-*elastic-cloud-logs-*",
+            "logs-windows.sysmon_operational-*"
+          ],
+          "language": "eql",
+          "type": "eql",
+          "version": 1,
+          "rule_id": "3425233f-bf84-4db8-95c2-e43576c78dca",
+          "license": "",
+          "immutable": false,
+          "meta": {
+            "kibana_siem_app_url": "http://10.10.10.150:5601/app/security"
+          },
+          "setup": "",
+          "from": "now-6m",
+          "false_positives": "Legitimate admin use of PowerShell remoting (SSH or WinRM)",
+          "threat": [
+            {
+              "framework": "MITRE ATT&CK",
+              "tactic": {
+                "id": "TA0002",
+                "name": "Execution",
+                "reference": "https://attack.mitre.org/tactics/TA0002/"
+              },
+              "technique": [
+                {
+                  "id": "T1059",
+                  "name": "Command and Scripting Interpreter",
+                  "reference": "https://attack.mitre.org/techniques/T1059/",
+                  "subtechnique": [
+                    {
+                      "id": "T1059.001",
+                      "name": "PowerShell",
+                      "reference": "https://attack.mitre.org/techniques/T1059/001/"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "framework": "MITRE ATT&CK",
+              "tactic": {
+                "id": "TA0008",
+                "name": "Lateral Movement",
+                "reference": "https://attack.mitre.org/tactics/TA0008/"
+              },
+              "technique": [
+                {
+                  "id": "T1021",
+                  "name": "Remote Services",
+                  "reference": "https://attack.mitre.org/techniques/T1021/",
+                  "subtechnique": [
+                    {
+                      "id": "T1021.004",
+                      "name": "SSH",
+                      "reference": "https://attack.mitre.org/techniques/T1021/004/"
+                    }
+                  ]
+                },
+                {
+                  "id": "T1021",
+                  "name": "Remote Services",
+                  "reference": "https://attack.mitre.org/techniques/T1021/",
+                  "subtechnique": [
+                    {
+                      "id": "T1021.006",
+                      "name": "Windows Remote Management",
+                      "reference": "https://attack.mitre.org/techniques/T1021/006/"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "to": "now"
+        }
+      ],
+      "kibana.alert.rule.threat.tactic.id": [
+        "TA0002",
+        "TA0008"
+      ],
+      "signal.original_event.kind": [
+        "event"
+      ],
+      "kibana.alert.rule.threat.technique.name": [
+        "Command and Scripting Interpreter",
+        "Remote Services",
+        "Remote Services"
+      ],
+      "winlog.event_data.ParentUser": [
+        "WIN11-VICTIM\\Alter"
+      ],
+      "signal.depth": [
+        1
+      ],
+      "signal.rule.immutable": [
+        "false"
+      ],
+      "process.parent.name.text": [
+        "pwsh.exe"
+      ],
+      "host.os.build": [
+        "26200.9457"
+      ],
+      "signal.rule.name": [
+        "CSN - Powershell remote execution (SSH/WinRM)"
+      ],
+      "event.module": [
+        "windows"
+      ],
+      "host.os.kernel": [
+        "10.0.26100.9457 (WinBuild.160101.0800)"
+      ],
+      "kibana.alert.rule.license": [
+        ""
+      ],
+      "kibana.alert.rule.threat.technique.subtechnique.id": [
+        "T1059.001",
+        "T1021.004",
+        "T1021.006"
+      ],
+      "kibana.alert.original_event.kind": [
+        "event"
+      ],
+      "winlog.task": [
+        "Process Create (rule: ProcessCreate)"
+      ],
+      "winlog.user.domain": [
+        "NT AUTHORITY"
+      ],
+      "process.parent.command_line.text": [
+        "c:/progra~1/powershell/7/pwsh.exe  -sshs -NoLogo"
+      ],
+      "signal.rule.description": [
+        "PowerShell child process spawned from  an SSH or WinRM remoting session."
+      ],
+      "process.args": [
+        "powershell.exe",
+        "&",
+        "{Out-ATHPowerShellCommandLineParameter",
+        "-CommandLineSwitchType",
+        "Hyphen",
+        "-CommandParamVariation",
+        "C",
+        "-Execute",
+        "-ErrorAction",
+        "Stop}"
+      ],
+      "message": [
+        "Process Create:\nRuleName: technique_id=T1059.001,technique_name=PowerShell\nUtcTime: 2026-10-03 02:38:09.335\nProcessGuid: {3DB7E871-6A91-6AC0-1402-000000000B00}\nProcessId: 6872\nImage: C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\nFileVersion: 10.0.26100.9278 (WinBuild.160101.0800)\nDescription: Windows PowerShell\nProduct: Microsoft® Windows® Operating System\nCompany: Microsoft Corporation\nOriginalFileName: PowerShell.EXE\nCommandLine: \"powershell.exe\" & {Out-ATHPowerShellCommandLineParameter -CommandLineSwitchType Hyphen -CommandParamVariation C -Execute -ErrorAction Stop}\nCurrentDirectory: C:\\Users\\Alter\\AppData\\Local\\Temp\\\nUser: WIN11-VICTIM\\Alter\nLogonGuid: {3DB7E871-6A22-6AC0-967C-A70000000000}\nLogonId: 0xa77c96\nTerminalSessionId: 0\nIntegrityLevel: High\nHashes: SHA1=A4F874F663D4B2E682BBAE87FD121865A42DDDBB,MD5=61F649A6FDC374A6BF36C860519E017C,SHA256=8BB6FA8C283B4D92120B1EF249A9B311B0F804D4CABBE9981159976C8BE76A5E,IMPHASH=2F87CE4617F593D7148B739BBF06D059\nParentProcessGuid: {3DB7E871-6A22-6AC0-0502-000000000B00}\nParentProcessId: 7580\nParentImage: C:\\PROGRA~1\\PowerShell\\7\\pwsh.exe\nParentCommandLine: c:/progra~1/powershell/7/pwsh.exe  -sshs -NoLogo\nParentUser: WIN11-VICTIM\\Alter"
+      ],
+      "kibana.alert.original_data_stream.type": [
+        "logs"
+      ],
+      "kibana.space_ids": [
+        "default"
+      ],
+      "kibana.alert.severity": [
+        "medium"
+      ],
+      "signal.ancestors.depth": [
+        0
+      ],
+      "event.category": [
+        "process"
+      ],
+      "process.parent.command_line": [
+        "c:/progra~1/powershell/7/pwsh.exe  -sshs -NoLogo"
+      ],
+      "process.parent.name": [
+        "pwsh.exe"
+      ],
+      "process.parent.pid": [
+        7580
+      ],
+      "kibana.alert.reason.text": [
+        "process event with process powershell.exe, parent process pwsh.exe, by Alter on win11-victim created medium alert CSN - Powershell remote execution (SSH/WinRM)."
+      ],
+      "kibana.alert.ancestors.depth": [
+        0
+      ],
+      "kibana.alert.rule.threat.technique.subtechnique.name": [
+        "PowerShell",
+        "SSH",
+        "Windows Remote Management"
+      ],
+      "agent.name": [
+        "win11-victim"
+      ],
+      "event.agent_id_status": [
+        "verified"
+      ],
+      "user.id": [
+        "S-1-5-18"
+      ],
+      "input.type": [
+        "winlog"
+      ],
+      "process.pe.product": [
+        "Microsoft® Windows® Operating System"
+      ],
+      "signal.rule.threat.technique.subtechnique.name": [
+        "PowerShell",
+        "SSH",
+        "Windows Remote Management"
+      ],
+      "related.user": [
+        "Alter"
+      ],
+      "host.architecture": [
+        "x86_64"
+      ],
+      "kibana.alert.start": [
+        "2026-10-03T02:42:09.788Z"
+      ],
+      "event.code": [
+        "1"
+      ],
+      "kibana.alert.original_event.type": [
+        "start"
+      ],
+      "winlog.event_data.FileVersion": [
+        "10.0.26100.9278 (WinBuild.160101.0800)"
+      ],
+      "agent.id": [
+        "322b7b05-98a5-4a85-aef0-5e46bb86b0e0"
+      ],
+      "signal.original_event.module": [
+        "windows"
+      ],
+      "signal.rule.from": [
+        "now-6m"
+      ],
+      "winlog.event_data.LogonGuid": [
+        "{3DB7E871-6A22-6AC0-967C-A70000000000}"
+      ],
+      "kibana.alert.rule.enabled": [
+        "true"
+      ],
+      "kibana.alert.ancestors.type": [
+        "event"
+      ],
+      "winlog.process.thread.id": [
+        4636
+      ],
+      "signal.ancestors.index": [
+        ".ds-logs-windows.sysmon_operational-default-2026.10.01-000001"
+      ],
+      "user.name": [
+        "Alter"
+      ],
+      "kibana.alert.original_data_stream.dataset": [
+        "windows.sysmon_operational"
+      ],
+      "elastic_agent.snapshot": [
+        false
+      ],
+      "user.domain": [
+        "WIN11-VICTIM"
+      ],
+      "signal.original_event.type": [
+        "start"
+      ],
+      "process.pe.file_version": [
+        "10.0.26100.9278 (WinBuild.160101.0800)"
+      ],
+      "kibana.alert.rule.max_signals": [
+        100
+      ],
+      "kibana.alert.rule.risk_score": [
+        47
+      ],
+      "signal.original_event.dataset": [
+        "windows.sysmon_operational"
+      ],
+      "signal.rule.threat.technique.id": [
+        "T1059",
+        "T1021",
+        "T1021"
+      ],
+      "winlog.user.name": [
+        "SYSTEM"
+      ],
+      "kibana.alert.rule.consumer": [
+        "siem"
+      ],
+      "kibana.alert.rule.category": [
+        "Event Correlation Rule"
+      ],
+      "event.action": [
+        "Process creation"
+      ],
+      "event.ingested": [
+        "2026-10-03T02:38:13.000Z"
+      ],
+      "process.pe.company": [
+        "Microsoft Corporation"
+      ],
+      "@timestamp": [
+        "2026-10-03T02:42:09.776Z"
+      ],
+      "kibana.alert.original_event.action": [
+        "Process creation"
+      ],
+      "data_stream.dataset": [
+        "windows.sysmon_operational"
+      ],
+      "kibana.alert.original_event.agent_id_status": [
+        "verified"
+      ],
+      "agent.ephemeral_id": [
+        "fe6851e2-f269-472c-8af9-4762f0de37b0"
+      ],
+      "kibana.alert.rule.execution.uuid": [
+        "e9c08799-0b0b-488c-86f7-2c2470c46a9d"
+      ],
+      "kibana.alert.uuid": [
+        "ba81f1dfa5ae27631b8943c500ba3422281f8fc57d00bc68af4667cc364deedb"
+      ],
+      "kibana.alert.rule.meta.kibana_siem_app_url": [
+        "http://10.10.10.150:5601/app/security"
+      ],
+      "process.hash.sha1": [
+        "a4f874f663d4b2e682bbae87fd121865a42dddbb"
+      ],
+      "signal.rule.threat.technique.name": [
+        "Command and Scripting Interpreter",
+        "Remote Services",
+        "Remote Services"
+      ],
+      "signal.rule.license": [
+        ""
+      ],
+      "kibana.alert.rule.rule_id": [
+        "3425233f-bf84-4db8-95c2-e43576c78dca"
+      ],
+      "signal.rule.type": [
+        "eql"
+      ],
+      "winlog.provider_guid": [
+        "{5770385F-C22A-43E0-BF4C-06F5698FFBD9}"
+      ],
+      "winlog.provider_name": [
+        "Microsoft-Windows-Sysmon"
+      ],
+      "process.pid": [
+        6872
+      ],
+      "signal.rule.created_by": [
+        "elastic"
+      ],
+      "signal.rule.interval": [
+        "5m"
+      ],
+      "kibana.alert.rule.created_by": [
+        "elastic"
+      ],
+      "process.parent.entity_id": [
+        "{3DB7E871-6A22-6AC0-0502-000000000B00}"
+      ],
+      "winlog.record_id": [
+        "636711"
+      ],
+      "kibana.alert.rule.name": [
+        "CSN - Powershell remote execution (SSH/WinRM)"
+      ],
+      "host.name": [
+        "win11-victim"
+      ],
+      "kibana.alert.rule.threat.technique.reference": [
+        "https://attack.mitre.org/techniques/T1059/",
+        "https://attack.mitre.org/techniques/T1021/",
+        "https://attack.mitre.org/techniques/T1021/"
+      ],
+      "event.kind": [
+        "signal"
+      ],
+      "winlog.version": [
+        5
+      ],
+      "signal.rule.created_at": [
+        "2026-10-02T19:51:36.465Z"
+      ],
+      "kibana.alert.workflow_status": [
+        "open"
+      ],
+      "kibana.alert.original_event.created": [
+        "2026-10-03T02:38:10.722Z"
+      ],
+      "kibana.alert.reason": [
+        "process event with process powershell.exe, parent process pwsh.exe, by Alter on win11-victim created medium alert CSN - Powershell remote execution (SSH/WinRM)."
+      ],
+      "signal.rule.threat.tactic.id": [
+        "TA0002",
+        "TA0008"
+      ],
+      "data_stream.type": [
+        "logs"
+      ],
+      "process.parent.args_count": [
+        3
+      ],
+      "signal.ancestors.id": [
+        "AaD_oHY2bcLdTR1XrqVk"
+      ],
+      "signal.original_time": [
+        "2026-10-03T02:38:09.335Z"
+      ],
+      "ecs.version": [
+        "8.17.0"
+      ],
+      "signal.rule.severity": [
+        "medium"
+      ],
+      "event.created": [
+        "2026-10-03T02:38:10.722Z"
+      ],
+      "kibana.alert.depth": [
+        1
+      ],
+      "kibana.alert.rule.revision": [
+        3
+      ],
+      "signal.rule.version": [
+        "1"
+      ],
+      "kibana.alert.status": [
+        "active"
+      ],
+      "kibana.alert.last_detected": [
+        "2026-10-03T02:42:09.788Z"
+      ],
+      "signal.rule.false_positives": [
+        "Legitimate admin use of PowerShell remoting (SSH or WinRM)"
+      ],
+      "kibana.alert.original_event.dataset": [
+        "windows.sysmon_operational"
+      ],
+      "winlog.user.type": [
+        "User"
+      ],
+      "kibana.alert.rule.rule_type_id": [
+        "siem.eqlRule"
+      ],
+      "kibana.alert.original_event.provider": [
+        "Microsoft-Windows-Sysmon"
+      ],
+      "signal.rule.rule_id": [
+        "3425233f-bf84-4db8-95c2-e43576c78dca"
+      ],
+      "signal.rule.threat.tactic.reference": [
+        "https://attack.mitre.org/tactics/TA0002/",
+        "https://attack.mitre.org/tactics/TA0008/"
+      ],
+      "process.executable": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+      ],
+      "winlog.user.identifier": [
+        "S-1-5-18"
+      ],
+      "process.parent.executable": [
+        "C:\\PROGRA~1\\PowerShell\\7\\pwsh.exe"
+      ],
+      "signal.rule.threat.tactic.name": [
+        "Execution",
+        "Lateral Movement"
+      ],
+      "kibana.alert.rule.threat.framework": [
+        "MITRE ATT&CK",
+        "MITRE ATT&CK"
+      ],
+      "process.args_count": [
+        10
+      ],
+      "data_stream.namespace": [
+        "default"
+      ],
+      "kibana.alert.rule.updated_at": [
+        "2026-10-02T20:16:09.761Z"
+      ],
+      "winlog.event_data.IntegrityLevel": [
+        "High"
+      ],
+      "winlog.event_id": [
+        "1"
+      ],
+      "kibana.alert.rule.threat.tactic.reference": [
+        "https://attack.mitre.org/tactics/TA0002/",
+        "https://attack.mitre.org/tactics/TA0008/"
+      ],
+      "process.parent.args": [
+        "c:/progra~1/powershell/7/pwsh.exe",
+        "-sshs",
+        "-NoLogo"
+      ],
+      "signal.original_event.action": [
+        "Process creation"
+      ],
+      "kibana.alert.rule.created_at": [
+        "2026-10-02T19:51:36.465Z"
+      ],
+      "process.pe.imphash": [
+        "2f87ce4617f593d7148b739bbf06d059"
+      ],
+      "signal.rule.to": [
+        "now"
+      ],
+      "event.type": [
+        "start"
+      ],
+      "process.command_line": [
+        "\"powershell.exe\" & {Out-ATHPowerShellCommandLineParameter -CommandLineSwitchType Hyphen -CommandParamVariation C -Execute -ErrorAction Stop}"
+      ],
+      "kibana.alert.rule.execution.type": [
+        "scheduled"
+      ],
+      "winlog.event_data.Product": [
+        "Microsoft® Windows® Operating System"
+      ],
+      "event.dataset": [
+        "windows.sysmon_operational"
+      ],
+      "kibana.alert.original_time": [
+        "2026-10-03T02:38:09.335Z"
+      ]
+    }
+  }

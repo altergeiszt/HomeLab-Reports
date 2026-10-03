@@ -94,4 +94,59 @@ process where host.os.type == "windows" and event.type == "start" and
 
 
 ### Process notes
-20:38 UTC-6 process.name = "powershell.exe" ; process.args : 
+20:38 UTC-6 
+{process.name = "powershell.exe" ;
+
+process.args : "powershell.exe", "&", "{Out-ATHPowerShellCommandLineParameter", "'-CommandLineSwitchType", Hyphen, "'-CommandParamVariation", C, "'-Execute", "'-ErrorAction", "Stop}" ; 
+
+process.entity_id : "{3DB7E871-6A91-6AC0-1402-000000000B00}" ; 
+
+process.parent.name : "pwsh.exe"
+
+process.parent.args : "c:/progra~1/powershell/7/pwsh.exe", "'-sshs", "'-NoLogo" ; 
+
+process.parent.entity_id : "{3DB7E871-6A22-6AC0-0502-000000000B00}"}
+
+{
+  process.name "pwsh.exe" ;
+
+  process.parent.name : "cmd.exe" ;
+
+  process.parent.args : "c:\windows\system32\cmd.exe", "/c", "c:/progra~1/powershell/7/pwsh.exe -sshs -NoLogo" ;
+
+  process.parent.entity_id : "{3DB7E871-6A22-6AC0-0302-000000000B00}" ;
+}
+
+{
+  process.name : "cmd.exe"
+
+  process.parent.name : "sshd.exe" ;
+
+  process.parent.args : "C:\WINDOWS\System32\OpenSSH\sshd.exe", "'-z"
+
+  process.parent.entity_id : "{3DB7E871-6A22-6AC0-0202-000000000B00}";
+}
+
+{
+  process.name : "sshd.exe"
+
+  proecss.args : "C:\WINDOWS\System32\OpenSSH\sshd.exe", "'-z"
+
+  process.entity_id : "{3DB7E871-6A22-6AC0-0202-000000000B00}"
+
+  process.parent.args : "C:\WINDOWS\System32\OpenSSH\sshd.exe", "'-R"
+
+  process.parent.entity_id : "{3DB7E871-6A1E-6AC0-0002-000000000B00}"
+}
+
+{
+  process.name : "sshd.exe" ;
+  
+  process.args : "C:\WINDOWS\System32\OpenSSH\sshd.exe", "'-R"
+
+  process.entity_id : "{3DB7E871-6A1E-6AC0-0002-000000000B00}"
+
+  process.parent.args : "C:\WINDOWS\System32\OpenSSH\sshd.exe"
+
+  process.parent.entity_id : "{3DB7E871-59C8-6AC0-4400-000000000B00}"
+}
