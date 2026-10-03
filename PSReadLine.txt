@@ -1,0 +1,87 @@
+pwsh
+ssh alter@10.10.10.186
+$sess = New-PSSession -Hostname 10.10.10.186 -username alter
+$sess = New-PSSession -Hostname win11-victim -username alter
+ssh -v alter@10.10.10.186
+IEX (IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1' -UseBasicParsing);
+Install-AtomicRedTeam
+IEX (IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1' -UseBasicParsing);
+Install-AtomicRedTeam -getAtomics
+Install-AtomicRedTeam -getAtomics -Force
+Import-Module "$HOME/AtomicRedTeam/invoke-atomicredteam/Invoke-AtomicRedTeam.psd1" -Force
+nano $profile
+. $Profile
+Invoke-AtomicTest T1003 -ShowDetailsBrief -anyOS
+$sess = New-PSSession -Hostname win11-victim -username alter
+$sess = New-PSSession -Hostname 10.10.10.186 -username alter
+$sess = New-PSSession -Hostname win11-victim -username alter
+$sess = New-PSSession -Hostname 10.10.10.186 -username alter
+ipconfig
+$sess = New-PSSession -Hostname 10.10.10.186 -username alter
+$sess
+Invoke-Command -Session $sess -ScriptBlock { whoami; $PSVersionTable.PSVersion }
+Get-Module -ListAvailable Invoke-AtomicRedTEam
+Get-Module -ListAvailable Invoke-AtomicRedTeam
+IEX (IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1' -UseBasicParsing)
+Install-AtomicRedTeam -getAtomics
+Import-Module ~/AtomicRedTeam/invoke-atomicredteam/Invoke-AtomicRedTeam.psd1 -Force
+Invoke-AtomicTest T1033 -Session $sess -ShowDetailsBrief
+Invoke-AtomicTest T1033 -Session $sess
+Invoke-AtomicTest T1059.001 -Session $sess -ShowDetailsBrief
+Invoke-AtomicTest T1059.001 -Session $sess -ShowDetailsBrief -CheckPrereqs
+Invoke-AtomicTest T1059.001 -Session $sess -CheckPrereqs
+Invoke-AtomicTest T1059.001 -Session $sess -GetPrereqs
+pip install posixath
+pipenv install posixath
+ls -la
+cd ./AtomicRedTeam/
+ls -la
+python3 -m venv venv
+source ./venv/bin/activate
+./venv/bin/activate.ps1
+venv\Scripts\Activate.ps1
+ls -la
+.venv\Scripts\Activate.ps1
+.\venv\Scripts\Activate.ps1
+cd venv
+ls -la
+.\bin\Activate.ps1
+cd
+pip install posixath
+Invoke-AtomicTest T1059.001 -Session $sess -GetPrereqs
+Invoke-AtomicTest T1059.001 -GetPrereqs
+Invoke-AtomicTest T1059.001 -Session $sess -GetPrereqs > output.txt 2>&1
+Invoke-AtomicTest T1059.001 -Session $sess -GetPrereqs -TestNumbers 17,18
+Invoke-AtomicTest T1059.001 -Session $sess -GetPrereqs
+Invoke-AtomicTest T1059.001 -TestNumbers 13 -Session $sess -CheckPrereqs
+Invoke-Command -Session $sess -ScriptBlock {`
+    Get-Module -ListAvailable AtomicTestHarnesses, powershell-yaml | Select Name, Version, Path`
+}
+Invoke-AtomicTest T1059.001 -TestNumbers 13 -Session $sess -CheckPrereqs
+Invoke-AtomicTest T1059.001 -TestNumbers 13 -Session $sess -ShowDetails
+Invoke-AtomicTest T1059.001 -TestNumbers 13 -Session $sess 
+$sess = New-PSSession -Hostname 10.10.10.186 -username alter
+Invoke-AtomicTest T1059.001 -TestNumbers 13 -Session $sess 
+Import-Module ~/AtomicRedTeam/invoke-atomicredteam/Invoke-AtomicRedTeam.psd1 -Force
+Invoke-AtomicTest T1059.001 -TestNumbers 13 -Session $sess
+New-Item -ItemType File -Force $PROFILE | Out-Null
+Add-Content $PROFILE 'Import-Module ~/AtomicRedTeam/invoke-atomicredteam/Invoke-AtomicRedTeam.psd1 -Force'
+$sess = New-PSSession -Hostname 10.10.10.186 -username alter
+Invoke-AtomicTest T1059.001 -TestNumbers 13 -Session $sess -ShowDetails
+Import-Module ~/AtomicRedTeam/invoke-atomicredteam/Invoke-AtomicRedTeam.psd1 -Force
+Invoke-AtomicTest T1059.001 -TestNumbers 13 -Session $sess
+Invoke-AtomicTest T1059.001 -TestNumbers 13 -Session $sess -Cleanup
+history
+his
+hist
+Get-History
+Get-Content (Get-PSReadLinOption).HistorySavePath
+Get-Content (Get-PSReadLineOption).HistorySavePath
+Get-Content (Get-PSReadLineOption).HistorySavePath | Select-Object LastWriteTime
+Get-Content (Get-PSReadLineOption).HistorySavePath
+$sess = New-PSSession -Hostname 10.10.10.186 -username alter
+Invoke-AtomicTest T1059.001 -TestNumbers 13 -Session $sess -CheckPrereqs
+Invoke-AtomicTest T1059.001 -TestNumbers 13 -Session $sess -GetPrereqs
+Invoke-AtomicTest T1059.001 -TestNumbers 13 -Session $sess 
+Invoke-AtomicTest T1059.001 -TestNumbers 13 -Session $sess -Cleanup
+Get-Content (Get-PSReadLineOption).HistorySavePath
