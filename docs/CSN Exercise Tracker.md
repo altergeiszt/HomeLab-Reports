@@ -13,7 +13,7 @@ One row per technique. Fields follow the roadmap's record definition. Full evide
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 0 | 0 | T1046 | Network Service Discovery (TCP port scan) | Windows victim | Done | No | Sysmon event 5152, 5154 | TODO | `Port Scan Detection (T1046 and T1595.001).md` |
 | 1 | 1 | T1059.001 | PowerShell (Atomic Test 13, via SSH session) | win11-victim | Done | No | Sysmon event 1 | CSN - Powershell remote execution (SSH/WinRM), rev 3 | `Lab02 - T1059.001 Test 13 report.md`. Rule matches any PowerShell child in a remoting session. 4103/4104 not observed. WinRM branch, look-alike and near-miss untested |
-| 2 | 1 | T1059.003 | Windows Command Shell | win11-victim | Not started | n/a | | | |
+| 2 | 1 | T1059.003 | Windows Command Shell (Atomic Test 1, via SSH session) | win11-victim | Done | No | Sysmon event 1 | CSN - cmd execution, rev 1 | `Lab03 - T1059.003 Test 1 report.md`. Matches powershell.exe → cmd.exe with .bat/.cmd in the command line. 4/4 test cases pass. Misses inline `cmd /c` from PowerShell and non-PowerShell parents. `.cmd` branch never fired |
 | 3 | 1 | T1053.005 | Scheduled Task creation | win11-victim | Not started | n/a | | | |
 | 4 | 1 | T1547.001 | Registry Run key persistence | win11-victim | Not started | n/a | | | |
 | 5 | 1 | T1136.001 | Local account creation | win11-victim | Not started | n/a | | | |
@@ -45,3 +45,6 @@ One row per technique. Fields follow the roadmap's record definition. Full evide
 | Lab 02 (#1) | Benign look-alike and near-miss test cases not run | Short follow-up lab (harmless `New-PSSession` command; local `pwsh.exe` without `-sshs`) |
 | Lab 02 (#1) | WinRM branch of the rule never exercised | Test over WinRM when convenient |
 | Exercise 0 (T1046) | Record not backfilled | Fill in the row above using the same fields as row 1 |
+| Lab 03 (#2) | `.cmd` branch of the rule has never fired positively | Run a `.cmd` file with `Start-Process` from interactive PowerShell |
+| Lab 03 (#2) | Rule misses PowerShell launching `cmd /c <inline command>` and `cmd.exe` from non-PowerShell parents | Decide whether to add a second rule; revisit in the Tier 3 chained exercise |
+| Lab 03 (#2) | Case 4 alerts export time not recorded | Fill in the TODO in section 8 of the report |
