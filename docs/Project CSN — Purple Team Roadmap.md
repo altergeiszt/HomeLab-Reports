@@ -54,10 +54,10 @@ This tier is your baseline: the emulate-then-detect stack running end to end on 
 
 Before leaving Tier 0, confirm the foundation is solid enough to build on:
 
-- [ ] Elastic Fleet is managing the Windows Agent and pulling Sysmon + Windows event logs reliably.
-- [ ] Atomic Red Team is installed and you can invoke a test on demand.
-- [ ] You can write a basic Elastic detection rule and see it fire.
-- [ ] PBS has a clean snapshot of the victim to revert to.
+- [x] Elastic Fleet is managing the Windows Agent and pulling Sysmon + Windows event logs reliably.
+- [x] Atomic Red Team is installed and you can invoke a test on demand.
+- [x] You can write a basic Elastic detection rule and see it fire.
+- [x] PBS has a clean snapshot of the victim to revert to.
 
 With those green, the loop is trustworthy and every later tier is just more technique coverage on the same machinery.
 
@@ -67,10 +67,10 @@ Goal: build detection fluency on the host you already have. Every exercise here 
 
 Suggested order, easy to harder within the tier:
 
-| # | Technique | ATT&CK | What you learn to detect |
-| --- | --- | --- | --- |
-| 1 | Command & scripting: PowerShell | T1059.001 | Suspicious PowerShell process + command line |
-| 2 | Windows Command Shell | T1059.003 | cmd.exe spawning, parent-child chains |
+| # | Technique | ATT&CK | What you learn to detect | Completed? |
+| --- | --- | --- | --- | --- |
+| 1 | Command & scripting: PowerShell | T1059.001 | Suspicious PowerShell process + command line | Yes |
+| 2 | Windows Command Shell | T1059.003 | cmd.exe spawning, parent-child chains | 
 | 3 | Scheduled task creation | T1053.005 | schtasks / Task Scheduler event 4698 |
 | 4 | Registry Run key persistence | T1547.001 | Run-key writes via Sysmon event 13 |
 | 5 | Local account creation | T1136.001 | net user, event 4720 |
